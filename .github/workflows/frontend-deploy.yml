@@ -14,7 +14,7 @@ jobs:
     - name: Login to docker hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
     - name: Build docker image
-      run: docker build -t safakedidi/smart-book-creator-react --build-arg NODE_ENV='production' --build-arg SERVER_BASE_URL='${{ secrets.SERVER_BASE_URL }}'  -f frontend/Dockerfile frontend
+      run: docker build -t safakedidi/smart-book-creator-react --build-arg NODE_ENV='production' --build-arg SERVER_BASE_URL='${{ secrets.SERVER_BASE_URL }}'  -f frontend/smartBookCreator/Dockerfile frontend/smartBookCreator
     - name: Push image to dockerhub
       run: docker push safakedidi/smart-book-creator-react:latest
 
