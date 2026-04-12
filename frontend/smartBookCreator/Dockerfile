@@ -11,7 +11,7 @@ ENV SERVER_BASE_URL=$SERVER_BASE_URL
 #Build App
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
