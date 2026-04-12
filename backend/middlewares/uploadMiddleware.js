@@ -1,44 +1,56 @@
+require("dotenv").config();
+const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { Upload } = require("@aws-sdk/lib-storage");
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
 
-const uploadDir = "uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Set up storage engine
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const name = file.originalname.split(".")[0];
-    const ext = path.extname(file.originalname);
-    cb(null, `${name}-${Date.now()}${ext}`);
+// Initialize S3 v3 client
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   },
 });
 
-//Check file type
-function checkFileType(file, cb) {
-  const fileTypes = /jpeg|jpg|png|gif/;
-  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
-  const mimetype = fileTypes.test(file.mimetype);
+const fileFilter = (req, file, cb) => {
+  const allowedTypes = /jpeg|jpg|png|gif/;
+  const ext = path.extname(file.originalname).toLowerCase().slice(1);
+  const mimetype = file.mimetype.toLowerCase();
+  if (allowedTypes.test(ext) && allowedTypes.test(mimetype)) cb(null, true);
+  else cb(new Error("Only image files are allowed"));
+};
 
-  if (mimetype && extname) {
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only");
-  }
-}
+// Use memory storage first
+const storage = multer.memoryStorage();
 
-//Initialize upload
 const upload = multer({
-  storage: storage,
-  limits: { fileSize: 2 * 1024 * 1024 },
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
-  },
-}).single("coverImage");
+  storage,
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2 MB
+  fileFilter,
+});
 
-module.exports = upload;
+// Function to upload buffer to S3
+const uploadToS3 = async (file) => {
+  const fileName = `uploads/${Date.now()}-${file.originalname}`;
+  
+  const upload = new Upload({
+    client: s3,
+    params: {
+      Bucket: process.env.S3_BUCKET_NAME,
+      Key: fileName,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+      ACL: "public-read"
+    },
+  });
+
+  await upload.done();
+
+  return {
+    url: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.AWS_REGION}.amazonaws.com/${fileName}`,
+    key: fileName
+  };
+};
+
+module.exports = { upload, uploadToS3 };

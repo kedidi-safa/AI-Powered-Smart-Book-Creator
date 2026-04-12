@@ -16,38 +16,37 @@ const chapterSchema = new mongoose.Schema({
 });
 
 const bookSchema = new mongoose.Schema(
-    {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            required: true,
-            ref: "User"
-        },
-        title: {
-            type: String,
-            default: ""
-        },
-        subtitle: {
-            type: String,
-            default: ""
-        },
-        author: {
-            type: String,
-            required: true,
-        },
-        coverImage: {
-            type: String,
-            default: ""
-        },
-        chapters: [chapterSchema],
-        status: {
-            type: String,
-            enum: ["draft", "publisher"],
-            default: "draft"
-        }
-
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: "User",
     },
-    {timestamps: true}
-)
+    title: {
+      type: String,
+      default: "",
+    },
+    subtitle: {
+      type: String,
+      default: "",
+    },
+    author: {
+      type: String,
+      required: true,
+    },
+    coverImage: {
+      url: { type: String, default: "" },
+      key: { type: String, default: "" },
+      
+    },
+    chapters: [chapterSchema],
+    status: {
+      type: String,
+      enum: ["draft", "publisher"],
+      default: "draft",
+    },
+  },
+  { timestamps: true },
+);
 
-
-module.exports = mongoose.model("Book", bookSchema)
+module.exports = mongoose.model("Book", bookSchema);

@@ -1,3 +1,4 @@
+const { uploadToS3 } = require("../middlewares/uploadMiddleware");
 const Book = require("../models/Book");
 
 // @desc.   Create new book
@@ -135,11 +136,15 @@ const updateBookCover = async (req, res) => {
         .status(401)
         .json({ message: "Not authorized to update this book" });
     }
-    if (req.file) {
-      book.coverImage = `/${req.file.path}`;
-    } else {
+    if (!req.file) {
       return res.status(400).json({ message: "No image file provided" });
     }
+
+    const result = await uploadToS3(req.file);
+    book.coverImage = {
+      url: result.url,
+      key: result.key,
+    };
 
     const updatedBook = await book.save();
     res.status(200).json(updatedBook);

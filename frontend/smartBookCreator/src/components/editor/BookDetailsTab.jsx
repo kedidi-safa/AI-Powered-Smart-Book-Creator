@@ -11,9 +11,7 @@ const BookDetailsTab = ({
   isUploading,
   fileInputRef,
 }) => {
-  const coverImageUrl = book.coverImage.startsWith("http")
-    ? book.coverImage
-    : `${BASE_URL}backend${book.coverImage}`.replace(/\\/g, "/");
+  const coverImageUrl = book.coverImage.url || "";
   return (
     <div className="p-8 max-w-4xl mx-auto">
       <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
