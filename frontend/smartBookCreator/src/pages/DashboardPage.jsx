@@ -9,7 +9,7 @@ import Button from "../components/ui/Button";
 import { Book, Plus } from "lucide-react";
 import BookCard from "../components/cards/BookCard";
 import toast from "react-hot-toast";
-import CreateBookModal from "../components/modals/createBookModal";
+import CreateBookModal from "../components/modals/CreateBookModal";
 
 const BookCardSkeleton = () => {
   <div className="animate-pulse flex space-x-4 bg-white p-4 rounded-lg shadow border border-slate-200">

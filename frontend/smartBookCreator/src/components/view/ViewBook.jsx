@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Menu } from "lucide-react";
 import React, { useState } from "react";
-import ViewChapterSidebar from "./viewChapterSidebar";
+import ViewChapterSidebar from "./ViewChapterSidebar";
 
 const ViewBook = ({ book }) => {
   const [selectedChapterIndex, setSelectedChapterIndex] = useState(0);
