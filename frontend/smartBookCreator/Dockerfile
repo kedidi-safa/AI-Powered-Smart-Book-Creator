@@ -7,7 +7,11 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+ARG VITE_SERVER_BASE_URL
+ENV VITE_SERVER_BASE_URL=$VITE_SERVER_BASE_URL
+
+RUN VITE_SERVER_BASE_URL=$VITE_SERVER_BASE_URL npm run build
+
 
 # Serve with Nginx
 FROM nginx:alpine
