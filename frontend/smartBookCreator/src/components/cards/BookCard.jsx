@@ -1,6 +1,5 @@
 import React from "react";
 import { useNavigate } from "react-router";
-import { BASE_URL } from "../../utils/apiPaths";
 import { Edit, Trash2 } from "lucide-react";
 
 const BookCard = ({ book, onDelete }) => {

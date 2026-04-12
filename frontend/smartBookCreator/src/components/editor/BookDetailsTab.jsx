@@ -1,6 +1,5 @@
 import React from "react";
 import InputField from "../ui/InputField";
-import { BASE_URL } from "../../utils/apiPaths";
 import Button from "../ui/Button";
 import { UploadCloud } from "lucide-react";
 

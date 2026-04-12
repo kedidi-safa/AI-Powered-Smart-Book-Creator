@@ -1,0 +1,32 @@
+name: Deploy React Application
+
+on:
+  push:
+    branches:
+    - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Source
+      uses: actions/checkout@v5
+    - name: Login to docker hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
+    - name: Build docker image
+      run: docker build -t safakedidi/smart-book-creator-react --build-arg NODE_ENV='production' --build-arg SERVER_BASE_URL='${{ secrets.SERVER_BASE_URL }}'  -f frontend/Dockerfile frontend
+    - name: Push image to dockerhub
+      run: docker push safakedidi/smart-book-creator-react:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+    - name: Pull image from dockerhub
+      run: docker pull safakedidi/smart-book-creator-react:latest
+    - name: Stop and remove old container
+      run: |
+        docker stop smart-book-creator-react-container || true
+        docker rm smart-book-creator-react-container || true
+    - name: Run docker container
+      run: docker run -d -p 3000:80 --name smart-book-creator-react-container safakedidi/smart-book-creator-react
