@@ -14,7 +14,7 @@ jobs:
     - name: Login to docker hub
       run: docker login -u ${{ secrets.DOCKER_USERNAME}} -p ${{ secrets.DOCKER_PASSWORD}}
     - name: Build docker image
-      run: docker build -t safakedidi/smart-book-creator-node .
+      run: docker build -t safakedidi/smart-book-creator-node -f backend/Dockerfile backend
     - name: Push image to dockerhub
       run: docker push safakedidi/smart-book-creator-node:latest
 
