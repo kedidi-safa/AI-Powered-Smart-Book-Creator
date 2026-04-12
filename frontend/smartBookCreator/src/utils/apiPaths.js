@@ -24,6 +24,6 @@ export const API_PATHS = {
 };
 
 export const BASE_URL =
-  import.meta.env.MODE === "development"
-    ? import.meta.env.VITE_LOCAL_BASE_URL
-    : import.meta.env.VITE_SERVER_BASE_URL;
+  import.meta.env.NODE_ENV === "development"
+    ? import.meta.env.LOCAL_BASE_URL
+    : import.meta.env.SERVER_BASE_URL;
