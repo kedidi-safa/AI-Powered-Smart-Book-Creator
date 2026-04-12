@@ -1,5 +1,13 @@
 FROM node:20-alpine as build
 
+#Declare build time env variables
+ARG NODE_ENV
+ARG SERVER_BASE_URL
+
+# Set default values for en variables
+ENV NODE_ENV=$NODE_ENV
+ENV SERVER_BASE_URL=$SERVER_BASE_URL
+
 #Build App
 WORKDIR /app
 COPY package.json .
