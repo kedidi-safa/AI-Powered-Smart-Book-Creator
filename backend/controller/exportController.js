@@ -220,8 +220,8 @@ const exportAsDocument = async (req, res) => {
 
     const coverPage = [];
 
-    if (book.coverImage && !book.coverImage.includes("pravatar")) {
-      const imagePath = book.coverImage.substring(1);
+    if (book.coverImage.url && !book.coverImage.url.includes("pravatar")) {
+      const imagePath = book.coverImage.url.substring(1);
 
       try {
         if (fs.existsSync(imagePath)) {
@@ -694,8 +694,8 @@ const exportAsPDF = async (req, res) => {
 
     doc.pipe(res);
 
-    if (book.coverImage && !book.coverImage.includes("pravatar")) {
-      const imagePath = book.coverImage.substring(1);
+    if (book.coverImage.url && !book.coverImage.url.includes("pravatar")) {
+      const imagePath = book.coverImage.url.substring(1);
 
       try {
         if (fs.existsSync(imagePath)) {
