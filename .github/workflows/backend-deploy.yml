@@ -38,5 +38,7 @@ jobs:
       run: |
         docker stop smart-book-creator-api-container || true
         docker rm smart-book-creator-api-container || true
+    - name: Cleanup Docker
+      run: docker system prune -a -f
     - name: Run docker container
       run: docker run -d -p 8000:8000 --name smart-book-creator-api-container --env-file .env safakedidi/smart-book-creator-node

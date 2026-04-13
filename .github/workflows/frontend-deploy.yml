@@ -28,5 +28,7 @@ jobs:
       run: |
         docker stop smart-book-creator-react-container || true
         docker rm smart-book-creator-react-container || true
+    - name: Cleanup Docker
+      run: docker system prune -a -f
     - name: Run docker container
       run: docker run -d -p 3000:80 --name smart-book-creator-react-container safakedidi/smart-book-creator-react
