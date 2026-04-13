@@ -15,6 +15,7 @@ RUN VITE_SERVER_BASE_URL=$VITE_SERVER_BASE_URL npm run build
 
 # Serve with Nginx
 FROM nginx:alpine
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 COPY --from=build /app/dist .
